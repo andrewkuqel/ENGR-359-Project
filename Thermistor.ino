@@ -1,13 +1,17 @@
 //Set thermistor up with a 10K resistor NTC 
 //Refer to http://www.circuitbasics.com/arduino-thermistor-temperature-sensor-tutorial/
-//Use Steinhart equation to convert resistance to temperature
+//https://electronics.stackexchange.com/questions/105682/thermistor-calculations-using-b-parameter-equation
+//Use Beta Equation to convert resistance to temperature
 
 int Tinputpin = 0;
-int Vout;
+int Vout;//Output voltage for voltage divider
 int LEDpin=5;
-float R1 = 10000; //Resistor value
-float logR2, R2, T;
-float c1 = , c2 = , c3 = ; //Coefficients of thermistor
+int Beta = 3380; //3380 Kelvin Beta (25/50)
+int Ro = 10000; //Resistance at 25 C
+int To= 298.15; //Temp kelvin at 25 C
+float R2;  //Resistance of thermistor
+float R1=10000; //Known resistor value you put in with thermistor should be close to same value as thermistor
+float Rfinity= Ro*exp(-(Beta/To));
 
 void setup() {
 Serial.begin(9600); //For debugging and testing temp sensor readings
@@ -17,10 +21,11 @@ pinMode(5,OUTPUT); //Digital pin PWM
 
 void loop() {
 
-  Vo = analogRead(Tinputpin);
-  R2 = R1 * (1023.0 / (float)Vout - 1.0);
-  logR2 = log(R2);
-  T = (1.0 / (c1 + c2*logR2 + c3*logR2*logR2*logR2)); //Stein-hart eqn to convert resistance to temp
+  
+  R2 = R1 * (1023.0 / (float)Vout - 1.0); // R1 * (5V/ voltage bewteen resistors and thermistor -1)
+ 
+  T = (B/ln(R2/Rfinity)); //Beta eqn to convert resistance to temp
+  
   T = T - 273.15;
  
   Serial.print("Temperature: "); //Debugging

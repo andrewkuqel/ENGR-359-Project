@@ -3,7 +3,7 @@
 //https://electronics.stackexchange.com/questions/105682/thermistor-calculations-using-b-parameter-equation
 //Use Beta Equation to convert resistance to temperature
 
-int Tinputpin = 0;
+int Thermistorpin = 0;
 int Vout;//Output voltage for voltage divider
 int LEDpin=5;
 int Beta = 3380; //3380 Kelvin Beta (25/50)
@@ -21,7 +21,7 @@ pinMode(5,OUTPUT); //Digital pin PWM
 
 void loop() {
 
-  
+  Vout = analogRead(ThermistorPin);
   R2 = R1 * (1023.0 / (float)Vout - 1.0); // R1 * (5V/ voltage bewteen resistors and thermistor -1)
  
   T = (B/ln(R2/Rfinity)); //Beta eqn to convert resistance to temp

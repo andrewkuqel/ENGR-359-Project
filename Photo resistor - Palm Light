@@ -1,0 +1,40 @@
+//Need to use voltage divider with photo resistor
+const int analoga0 = 14;
+const int D5 = 5;
+int voltdivider;
+void setup() {
+  pinMode(D5,OUTPUT);
+  Serial.begin(9600); //Debugging
+  
+
+}
+
+void loop() {
+  voltdivider = analogRead(analoga0);
+  delay(5);
+  Serial.println("Voltage 0-1023 :");
+  Serial.println(voltdivider);
+  delay(5);
+  Serial.println("Voltage 0-255 PWM :");
+  int pwmvolt=voltdivider/4;
+  delay(5);
+  Serial.println(pwmvolt);
+  delay(5);
+
+  int pwmVolt= map(voltdivider,0,1023,0,255);
+  //Option One (Voltage changes according to ligght)
+  //analogWrite(D5,pwmVolt);
+  //delay(100);
+  
+  //Option Two (Preset voltages)
+  if (200<=pwmVolt<=255) {
+    analogWrite(D5,255);
+  } else if (199<=pwmVolt<=100){
+    analogWrite(D5,150);
+  } else if (pwmVolt<=99) {
+    analogWrite(D5,0);
+  }
+  
+  delay(100);
+  
+}
